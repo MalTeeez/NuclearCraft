@@ -107,7 +107,8 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	public double efficiency = 0;
 	public double heatVar = 5000;
 	public double heat;
-	
+	public int overheatCounter = 0;
+
 	public int lastE;
 	public int E;
 	
@@ -171,8 +172,16 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	    
 	public void overheat(World world, double x, double y, double z, float radius, BombType type) {
 		if (this.heat > 20000) {
-	    	if (NuclearCraft.fusionMeltdowns) NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true);
-	    	else this.heat = 20000;
+			if (NuclearCraft.fusionMeltdowns) {
+	    		if (overheatCounter >= 12) {
+					NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true);
+					overheatCounter = 0;
+				} else {
+					overheatCounter++;
+				}
+			} else {
+				this.heat = 20000;
+			}
 	    }
 	}
 	    

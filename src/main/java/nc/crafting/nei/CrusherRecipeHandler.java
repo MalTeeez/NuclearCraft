@@ -29,6 +29,8 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import cpw.mods.fml.common.FMLLog;
+
 public class CrusherRecipeHandler extends TemplateRecipeHandler
 {
     public class CrushingPair extends CachedRecipe
@@ -83,7 +85,7 @@ public class CrusherRecipeHandler extends TemplateRecipeHandler
     }
 
     public TemplateRecipeHandler newInstance() {
-        if (ecrushfuels == null)
+        if (acrushfuels == null)
             findCrushFuels();
         return super.newInstance();
     }

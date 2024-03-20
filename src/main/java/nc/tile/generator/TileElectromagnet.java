@@ -26,11 +26,11 @@ public class TileElectromagnet extends TileInventory implements IEnergyHandler, 
 	public int energy;
 	public EnergyStorage storage;
 	public static int power = NuclearCraft.electromagnetRF*NuclearCraft.EMUpdateRate;
-	private Random rand = new Random();
+	private Random rand = new Random(); 
 	private int tickCount = 0;
 	
 	public TileElectromagnet() {
-		storage = new EnergyStorage(power*10, power*10);
+		storage = new EnergyStorage(power*10*20, power*10);
 		localizedName = "Electromagnet";
 		slots = new ItemStack[1];
 	}
@@ -54,7 +54,7 @@ public class TileElectromagnet extends TileInventory implements IEnergyHandler, 
 	
 	public void energy() {
 		 if (this.storage.getEnergyStored() >= power) {
-			 this.storage.extractEnergy(power, false);
+			this.storage.extractEnergy(power, false);
 		 	flag = true;
 		 } else {
 			 flag = false;

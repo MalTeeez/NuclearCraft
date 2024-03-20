@@ -1,6 +1,7 @@
 package nc.block.quantum;
 
 import java.util.Random;
+import java.util.Arrays;
 
 import nc.block.NCBlocks;
 import nc.tile.quantum.TileSimpleQuantum;
@@ -20,7 +21,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -97,7 +97,7 @@ public class BlockSimpleQuantum extends BlockContainer {
 					t.angle = /*180 +*/ newAngle;
 				}
 			}
-			//if (world.isRemote) player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + ("Angle: " + Math.round(displayedAngle) + "°")));
+			//if (world.isRemote) player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + ("Angle: " + Math.round(displayedAngle) + "")));
 		}
 		return true;
 	}

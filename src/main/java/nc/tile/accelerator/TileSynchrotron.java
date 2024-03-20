@@ -22,9 +22,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.common.FMLLog;
+
 
 public class TileSynchrotron extends TileInventory implements IEnergyHandler, IEnergyReceiver, ISidedInventory {
 	public int maxStorage;
+	private boolean firstCast = false;
 	public boolean flag;
 	public boolean flag1 = false;
 	public int complete;
@@ -50,7 +53,7 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 	private int checkCount = 0;
 	
 	public TileSynchrotron() {
-		storage = new EnergyStorage(1000000, 1000000);
+		storage = new EnergyStorage(250000000, 10000000);
 		localizedName = "Synchrotron";
 		slots = new ItemStack[3];
 	}
@@ -140,14 +143,21 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 	}
 	
 	private void power() {
+		if (firstCast) {
+			this.storage.extractEnergy(this.storage.getMaxEnergyStored() - this.storage.getMaxExtract()*2, false);
+			firstCast = false;
+		}
 		if (storage.getEnergyStored() >= (int) (1000*((200-(efficiency/10000))/100)) && worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord) && flag1 && percentageOn > 0 && fuel - length >= 0) {
 			fuel = fuel - (fuel < fuelMax/2 ? length*((fuel*2)+7500)/fuelMax : length*(fuelMax+7500)/fuelMax)/4;
 			this.storage.receiveEnergy(- (int) (1000*((200-(efficiency/10000))/100)), false);
 			if (efficiency >= 1000000) efficiency = 1000000; else efficiency = efficiency + 5000/(length+1);
 			if (length > 0) radiationPower = (fuel < fuelMax/2 ? (fuel*2)/fuelMax : 1)*(2*16*(((length*100)+1)/100)*(((length*100)+1)/100)*percentageOn*(NuclearCraft.superElectromagnetRF/100)*(efficiency/10000))/1000; // 20 kWatts per RF/t
 			particleEnergy = (percentageOn/100)*(m*c*c*(1/Math.sqrt(1-Math.pow((Math.sqrt((2*Math.sqrt(6)*e*Math.pow(c, 5/2)*Math.sqrt(k)*(length*100)*(2*16*(((length*100)+1)/100)*(((length*100)+1)/100)*percentageOn*(NuclearCraft.superElectromagnetRF/100)*(efficiency/10000))*Math.pow(10, 5.5)-3*c*c*(length*100)*(length*100)*(2*16*(((length*100)+1)/100)*(((length*100)+1)/100)*percentageOn*(NuclearCraft.superElectromagnetRF/100)*(efficiency/10000))*Math.pow(10, 10))/(8*e*e*c*k*Math.pow(10, -15)-3*(length*100)*(length*100)*(2*16*(((length*100)+1)/100)*(((length*100)+1)/100)*percentageOn*(NuclearCraft.superElectromagnetRF/100)*(efficiency/10000))*Math.pow(10, -6))))/299792458, 2))-1)*Math.pow(10, 4))/(1000*e);
+			double coeff = 0.0002*(Math.pow(length,2));
+			if (antimatter < 356000000) antimatter += ((radiationPower/(64000/NuclearCraft.acceleratorProduction))*coeff)*0.25;//Alternatives: (Math.pow((length/50),3)+0.5);, 0.002*(x-60)+1.2 
+			//FMLLog.info("Synchrotron antimatter generated pre nerf :" + (radiationPower/(64000/NuclearCraft.acceleratorProduction)) + " | and post nerf: " + ((radiationPower/(64000/NuclearCraft.acceleratorProduction))*coeff) + " with " + coeff + " coeff.");
 			
-			if (antimatter < 256000000) antimatter += radiationPower/(64000/NuclearCraft.acceleratorProduction);
+			if (antimatter < 0) antimatter = 0; //stop lock in sub 0
 		} else {
 			if (efficiency > 2500) efficiency = efficiency - 2500; else efficiency = 0;
 			radiationPower = 0;
@@ -158,6 +168,7 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 			if (slots[2] == null || slots[2].stackSize == 0) {
 				slots[2] = new ItemStack(NCItems.antimatter, 1);
 				antimatter -= 64000000;
+				firstCast = true;
 			}
 			else if (slots[2].stackSize < 64) {
 				slots[2].stackSize ++;

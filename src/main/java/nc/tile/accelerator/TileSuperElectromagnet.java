@@ -21,11 +21,11 @@ public class TileSuperElectromagnet extends TileInventory implements IEnergyHand
 	public boolean flag1;
 	public int energy;
 	public EnergyStorage storage;
-	public static int power = NuclearCraft.superElectromagnetRF*NuclearCraft.EMUpdateRate;
+	public static int power = NuclearCraft.superElectromagnetRF*NuclearCraft.EMUpdateRate*36;
 	private int tickCount = 0;
 	
 	public TileSuperElectromagnet() {
-		storage = new EnergyStorage(power*10, power*10);
+		storage = new EnergyStorage(((int)(power*10*1.01)), power*25);
 		localizedName = "Superconducting Electromagnet";
 		slots = new ItemStack[1];
 	}
