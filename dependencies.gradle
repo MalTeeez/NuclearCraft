@@ -37,5 +37,6 @@ dependencies {
     api("com.github.GTNewHorizons:NotEnoughItems:2.8.100-GTNH:dev")
     api("com.github.GTNewHorizons:CodeChickenCore:1.4.22:dev")
     implementation('net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev')
+    compileOnly(group: 'MalTeeez', name: 'u25core', version: '1.5', classifier: 'api')
     runtimeOnlyNonPublishable("team.chisel.ctmlib:CTMLib:MC1.7.10-1.4.1.5")
 }

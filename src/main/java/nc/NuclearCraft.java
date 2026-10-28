@@ -83,6 +83,7 @@ import nc.entity.EntityNukePrimed;
 import nc.entity.EntityPaul;
 import nc.gui.GuiHandler;
 import nc.handler.AnvilRepairHandler;
+import nc.handler.U25CoreRadiation;
 import nc.handler.BlockDropHandler;
 import nc.handler.EntityDropHandler;
 import nc.handler.EntityHandler;
@@ -410,6 +411,9 @@ public class NuclearCraft {
 	public static int fissionEfficiency;
 	public static int fissionHeat;
 	public static boolean nuclearMeltdowns;
+	public static double fissionRadiation;
+	public static double fissionMeltdownContamination;
+	public static double spentFuelRadiation;
 	public static boolean alternateCasing;
 	
 	public static int baseRFLEU;
@@ -500,6 +504,8 @@ public class NuclearCraft {
 	public static int fusionHeat;
 	public static int electromagnetRF;
 	public static boolean fusionMeltdowns;
+	public static double fusionRadiation;
+	public static double fusionMeltdownContamination;
 	public static boolean fusionEfficiencyConverge;
 	public static int fusionComparatorEfficiency;
 	public static boolean fusionSounds;
@@ -816,6 +822,9 @@ public class NuclearCraft {
 		fissionEfficiency = fissionConfig.getInt("Fission Reactor Fuel Efficiency Multiplier", "0: General", 100, 10, 1000, "");
 		fissionHeat = fissionConfig.getInt("Fission Reactor Heat Production Multiplier", "0: General", 100, 10, 1000, "");
 		nuclearMeltdowns = fissionConfig.getBoolean("Enable Fission Reactor Meltdowns", "0: General", true, "");
+		fissionRadiation = fissionConfig.getFloat("Fission Reactor Radiation", "0: General", 0.1F, 0F, 1000F, "Sv/h per effective cell while running, with U25Core");
+		fissionMeltdownContamination = fissionConfig.getFloat("Fission Meltdown Contamination", "0: General", 2F, 0F, 1000F, "Sv/h of lingering contamination per effective cell, with U25Core");
+		spentFuelRadiation = fissionConfig.getFloat("Spent Fuel Cell Radioactivity", "0: General", 0.01F, 0F, 1000F, "Sv/h per depleted fuel cell, with U25Core");
 		alternateCasing = fissionConfig.getBoolean("Use Alternate Casing Texture", "0: General", false, "");
 		
 		baseRFLEU = fissionConfig.getInt("LEU Base Power", "1: Fission Fuel Base Power/Steam Production", 200, 20, 2000, "");
@@ -913,6 +922,8 @@ public class NuclearCraft {
 		fusionHeat = fusionConfig.getInt("Fusion Reactor Heat Production Multiplier", "0: General", 100, 10, 1000, "");
 		electromagnetRF = fusionConfig.getInt("Electromagnet RF/t Requirement", "0: General", 50, 0, 1000, "");
 		fusionMeltdowns = fusionConfig.getBoolean("Enable Fusion Reactor Overheating", "0: General", true, "");
+		fusionRadiation = fusionConfig.getFloat("Fusion Reactor Radiation", "0: General", 0.2F, 0F, 1000F, "Sv/h per size while running, with U25Core");
+		fusionMeltdownContamination = fusionConfig.getFloat("Fusion Meltdown Contamination", "0: General", 1F, 0F, 1000F, "Sv/h of lingering contamination per size when it blows up, with U25Core");
 		
 		baseRFHH = fusionConfig.getInt("HH Base Power", "1: Fusion Combo Base Power", 320, 32, 3200, "");
 		baseRFHD = fusionConfig.getInt("HD Base Power", "1: Fusion Combo Base Power", 240, 24, 2400, "");
@@ -2822,6 +2833,8 @@ public class NuclearCraft {
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		if (U25CoreRadiation.LOADED) U25CoreRadiation.registerMaterials();
+
 		// Mod Recipes
 		IC2Hook = new IC2Recipes();
 		IC2Hook.hook();

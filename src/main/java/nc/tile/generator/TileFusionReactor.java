@@ -14,6 +14,9 @@ import nc.block.generator.BlockFusionReactor;
 import nc.handler.BombType;
 import nc.handler.EntityBomb;
 import nc.handler.NCExplosion;
+import nc.handler.U25CoreRadiation;
+import net.sxmaa.u25core.api.radiation.IRadiationSource;
+import cpw.mods.fml.common.Optional;
 import nc.item.NCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,7 +31,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileFusionReactor extends TileGeneratorInventory implements IEnergyReceiver, IGasHandler, ITubeConnection {
+@Optional.Interface(iface = "net.sxmaa.u25core.api.radiation.IRadiationSource", modid = "u25core")
+public class TileFusionReactor extends TileGeneratorInventory implements IEnergyReceiver, IGasHandler, ITubeConnection, IRadiationSource {
+
+	@Override
+	@Optional.Method(modid = "u25core")
+	public double getRadiationEmission() {
+		return flag && complete == 1 && !givenRedstone() ? size*NuclearCraft.fusionRadiation : 0;
+	}
 	
 	public GasTank gasTank;
 	public GasTank gasTank2;
@@ -175,7 +185,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 		if (this.heat > 20000) {
 			if (NuclearCraft.fusionMeltdowns) {
 	    		if (overheatCounter >= 12) {
-					NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true);
+					{ U25CoreRadiation.contaminate(world, xCoord, yCoord + 1, zCoord, size*NuclearCraft.fusionMeltdownContamination); NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true); }
 					overheatCounter = 0;
 				} else {
 					overheatCounter++;

@@ -14,6 +14,9 @@ import nc.block.generator.BlockFusionReactorSteam;
 import nc.handler.BombType;
 import nc.handler.EntityBomb;
 import nc.handler.NCExplosion;
+import nc.handler.U25CoreRadiation;
+import net.sxmaa.u25core.api.radiation.IRadiationSource;
+import cpw.mods.fml.common.Optional;
 import nc.item.NCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,7 +38,14 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public class TileFusionReactorSteam extends TileSteamProducer implements IEnergyHandler, IEnergyProvider, IEnergyConnection, IEnergyReceiver, IGasHandler, ITubeConnection {
+@Optional.Interface(iface = "net.sxmaa.u25core.api.radiation.IRadiationSource", modid = "u25core")
+public class TileFusionReactorSteam extends TileSteamProducer implements IEnergyHandler, IEnergyProvider, IEnergyConnection, IEnergyReceiver, IGasHandler, ITubeConnection, IRadiationSource {
+
+	@Override
+	@Optional.Method(modid = "u25core")
+	public double getRadiationEmission() {
+		return flag && complete == 1 && !givenRedstone() ? size*NuclearCraft.fusionRadiation : 0;
+	}
 	
 	public GasTank gasTank;
 	public GasTank gasTank2;
@@ -190,7 +200,7 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 	    
 	public void overheat(World world, double x, double y, double z, float radius, BombType type) {
 		if (this.heat > 20000) {
-	    	if (NuclearCraft.fusionMeltdowns) NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true);
+	    	if (NuclearCraft.fusionMeltdowns) { U25CoreRadiation.contaminate(world, xCoord, yCoord + 1, zCoord, size*NuclearCraft.fusionMeltdownContamination); NCExplosion.createExplosion(new EntityBomb(world).setType(type), world, (double)this.xCoord, (double)this.yCoord + 1, (double)this.zCoord, 10 + 4*size, 20F, true); }
 	    	else this.heat = 20000;
 	    }
 	}

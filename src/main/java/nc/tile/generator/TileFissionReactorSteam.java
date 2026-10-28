@@ -6,6 +6,9 @@ import nc.block.generator.BlockFissionReactorSteam;
 import nc.handler.BombType;
 import nc.handler.EntityBomb;
 import nc.handler.NCExplosion;
+import nc.handler.U25CoreRadiation;
+import net.sxmaa.u25core.api.radiation.IRadiationSource;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -14,7 +17,14 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileFissionReactorSteam extends TileSteamProducer {
+@Optional.Interface(iface = "net.sxmaa.u25core.api.radiation.IRadiationSource", modid = "u25core")
+public class TileFissionReactorSteam extends TileSteamProducer implements IRadiationSource {
+
+	@Override
+	@Optional.Method(modid = "u25core")
+	public double getRadiationEmission() {
+		return off == 0 && flag ? numberOfCells*NuclearCraft.fissionRadiation : 0;
+	}
 	
 	private int tickCount = 0;
     public int complete;
@@ -136,6 +146,7 @@ public class TileFissionReactorSteam extends TileSteamProducer {
             	else if (getBlockMetadata() == 2) NCExplosion.createExplosion(new EntityBomb(worldObj).setType(BombType.BOMB_STANDARD), worldObj, xCoord-((z0 + z1)/2), yCoord+((y0 + y1)/2), zCoord+((x0 + x1)/2), 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, true);
             	else if (getBlockMetadata() == 5) NCExplosion.createExplosion(new EntityBomb(worldObj).setType(BombType.BOMB_STANDARD), worldObj, xCoord-((x0 + x1)/2), yCoord+((y0 + y1)/2), zCoord-((z0 + z1)/2), 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, true);
             	else if (getBlockMetadata() == 3) NCExplosion.createExplosion(new EntityBomb(worldObj).setType(BombType.BOMB_STANDARD), worldObj, xCoord+((z0 + z1)/2), yCoord+((y0 + y1)/2), zCoord-((x0 + x1)/2), 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, 0.01F*(lx + ly + lz)*NuclearCraft.explosionRadius, true);
+    			U25CoreRadiation.contaminate(worldObj, xCoord, yCoord, zCoord, numberOfCells*NuclearCraft.fissionMeltdownContamination);
     			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
     		} else heat = 1000000;
     	}
