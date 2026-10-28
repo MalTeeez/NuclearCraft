@@ -52,9 +52,9 @@ public abstract class TileFuelUser extends TileInventory {
 				slots[b] = ItemStack.loadItemStackFromNBT(compound);
 			}
 		}
-		burnTime = (int) nbt.getShort("BurnTime");
-		cookTime = (int) nbt.getShort("CookTime");
-		currentItemBurnTime = (int) nbt.getShort("CurrentBurnTime");
+		burnTime = nbt.getInteger("BurnTime");
+		cookTime = nbt.getInteger("CookTime");
+		currentItemBurnTime = nbt.getInteger("CurrentBurnTime");
 		
 		if(nbt.hasKey("CustomName", 8))
 		{
@@ -64,9 +64,9 @@ public abstract class TileFuelUser extends TileInventory {
 	
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setShort("BurnTime", (short) burnTime);
-		nbt.setShort("CookTime", (short) cookTime);
-		nbt.setShort("CurrentBurnTime", (short) currentItemBurnTime);
+		nbt.setInteger("BurnTime", burnTime);
+		nbt.setInteger("CookTime", cookTime);
+		nbt.setInteger("CurrentBurnTime", currentItemBurnTime);
 		NBTTagList list = new NBTTagList();
 		for(int i = 0; i < slots.length; i++) {
 			if(slots[i] != null) {

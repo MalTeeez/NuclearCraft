@@ -37,6 +37,8 @@ public abstract class TileGeneratorInventory extends TileInventory implements IE
 
 	public void addEnergy() {
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			// Don't load a neighbouring chunk just to push into it
+			if (!worldObj.blockExists(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ)) continue;
 			TileEntity tile = worldObj.getTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 			if (tile instanceof IEnergyReceiver) {
 				storage.extractEnergy(((IEnergyReceiver)tile).receiveEnergy(side.getOpposite(), storage.extractEnergy(storage.getMaxEnergyStored(), true), false), false);

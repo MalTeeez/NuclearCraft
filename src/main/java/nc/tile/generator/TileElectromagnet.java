@@ -157,7 +157,7 @@ public class TileElectromagnet extends TileInventory implements IEnergyHandler, 
 	}
 
 	public int[] getAccessibleSlotsFromSide(int slot) {
-		return null;
+		return new int[0];
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int par) {

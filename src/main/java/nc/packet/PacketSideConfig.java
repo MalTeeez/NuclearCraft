@@ -45,7 +45,8 @@ public class PacketSideConfig implements IMessage {
 	public static class Handler implements IMessageHandler<PacketSideConfig, IMessage> {
 		public IMessage onMessage(PacketSideConfig message, MessageContext ctx) {
 			TileEntity te = NuclearCraft.NCProxy.getPlayerEntity(ctx).worldObj.getTileEntity(message.x, message.y, message.z);
-			if (te.getWorldObj().isRemote && te instanceof IReconfigurableSides) {
+			// The tile may not be loaded on the client yet
+			if (te != null && te.getWorldObj().isRemote && te instanceof IReconfigurableSides) {
 				IReconfigurableSides sides = (IReconfigurableSides) te;
 				sides.setSide(message.side, message.value);
 			}

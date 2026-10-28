@@ -73,7 +73,7 @@ public class TileAssembler extends TileMachineBase {
 				}
 			}
 		}
-		if (cookTime >= getProcessTime) {
+		if (cookTime >= getProcessTime && outputFits()) {
 			flag = true;
 			return true;
 		}

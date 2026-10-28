@@ -77,6 +77,23 @@ public class TileElectricFurnace extends TileInventory implements IEnergyHandler
 			flag = false;
 			return false;
 		}
+		// Check the output before the finished-cook shortcut below, which used to skip it. A speed upgrade added
+		// mid-cook could then overstack the output, or NPE on a swapped input.
+		ItemStack itemstack = getOutput(slots[0]);
+		if (itemstack == null) {
+			flag = false;
+			return false;
+		}
+		if (slots[1] != null) {
+			if (!slots[1].isItemEqual(itemstack)) {
+				flag = false;
+				return false;
+			}
+			if (slots[1].stackSize + itemstack.stackSize > slots[1].getMaxStackSize()) {
+				flag = false;
+				return false;
+			}
+		}
 		if (cookTime >= getFurnaceSpeed) {
 			flag = true;
 			return true;
@@ -96,22 +113,6 @@ public class TileElectricFurnace extends TileInventory implements IEnergyHandler
 		if (energyStorage.getEnergyStored() == 0) {
 			flag = false;
 			return false;
-		}
-	  
-		ItemStack itemstack = getOutput(slots[0]);
-		if (itemstack == null) {
-			flag = false;
-			return false;
-		}
-		if (slots[1] != null) {
-			if (!slots[1].isItemEqual(itemstack)) {
-				flag = false;
-				return false;
-			}
-			if (slots[1].stackSize + itemstack.stackSize > slots[1].getMaxStackSize()) {
-				flag = false;
-				return false;
-			}
 		}
 		flag = true;
 		return true;

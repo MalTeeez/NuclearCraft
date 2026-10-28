@@ -107,7 +107,8 @@ public class BlockDenseSteamDecompressor extends BlockContainer {
 	}
 	
 	public int getComparatorInputOverride(World world, int x, int y, int z, int i) {
-		return Container.calcRedstoneFromInventory((IInventory)world.getTileEntity(x, y, z));
+		// The tile isn't an IInventory, casting it like the other blocks do crashed the server
+		return 0;
 	}
 	
 	public Block idPicked(World world, int x, int y, int z) {

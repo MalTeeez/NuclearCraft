@@ -123,7 +123,7 @@ public abstract class TileMachineBase extends TileInventory implements IEnergyHa
 				return false;
 			}
 		}
-		if (this.cookTime >= getProcessTime) {
+		if (this.cookTime >= getProcessTime && outputFits()) {
 			flag = true;
 			return true;
 		}
@@ -169,6 +169,20 @@ public abstract class TileMachineBase extends TileInventory implements IEnergyHa
 		return true;
 	}
 	
+	/**
+	 * Whether the current recipe's output fits the output slots. canCook lets a finished cook through early, which
+	 * skipped this, so a speed upgrade added mid-cook could overstack the output or NPE on a swapped input.
+	 */
+	public boolean outputFits() {
+		ItemStack[] output = getOutput(inputs());
+		if (output == null || output.length != outputSize) return false;
+		for (int j = 0; j < outputSize; j++) {
+			ItemStack slot = this.slots[j + inputSize];
+			if (output[j] == null || slot != null && (!slot.isItemEqual(output[j]) || slot.stackSize + output[j].stackSize > slot.getMaxStackSize())) return false;
+		}
+		return true;
+	}
+
 	public ItemStack[] getOutput(ItemStack... itemstacks) {
 		return recipes.getOutput(itemstacks);
 	}

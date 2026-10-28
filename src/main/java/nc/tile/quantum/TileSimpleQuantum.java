@@ -23,7 +23,8 @@ public class TileSimpleQuantum extends TileEntity {
     		spin1 = spin;
     		BlockSimpleQuantum.set(angle, spin, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     	}
-    	markDirty();
+    	// Only mark the chunk for saving, markDirty() would also update all neighbours every tick
+    	worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
     }
 	
 	public void readFromNBT(NBTTagCompound nbt) {

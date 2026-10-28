@@ -66,7 +66,7 @@ public abstract class TileMachineFluidOut extends TileMachineBase implements IFl
 			flag = false;
 			return false;
 		}
-		if (this.cookTime >= getProcessTime) {
+		if (this.cookTime >= getProcessTime && outputFits()) {
 			flag = true;
 			return true;
 		}
@@ -158,10 +158,12 @@ public abstract class TileMachineFluidOut extends TileMachineBase implements IFl
 	}
 	
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (resource == null || !canFill(from, resource.getFluid())) return 0;
 		return tank.fill(resource, doFill);
 	}
 
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null || !resource.isFluidEqual(tank.getFluid())) return null;
 		return tank.drain(resource.amount, doDrain);
 	}
 

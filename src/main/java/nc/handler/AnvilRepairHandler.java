@@ -34,13 +34,13 @@ public final class AnvilRepairHandler {
 	private boolean isValidRepairItem(final Item tool, final ItemStack stack) {
 
 		if (stack != null && tool != null) {
-			if (tool == NCItems.bronzeAxe || tool == NCItems.bronzeHoe || tool == NCItems.bronzePickaxe || tool == NCItems.bronzeShovel || tool == NCItems.bronzeSword) return stack.getItem() == new ItemStack(NCItems.material, 1, 6).getItem();
-			if (tool == NCItems.toughAlloyAxe || tool == NCItems.toughAlloyHoe || tool == NCItems.toughAlloyPickaxe || tool == NCItems.toughAlloyShovel || tool == NCItems.toughAlloySword) return stack.getItem() == new ItemStack(NCItems.material, 1, 7).getItem();
-			if (tool == NCItems.dUAxe || tool == NCItems.dUHoe || tool == NCItems.dUPickaxe || tool == NCItems.dUShovel || tool == NCItems.dUSword) return stack.getItem() == new ItemStack(NCItems.parts, 1, 8).getItem();
-			if (tool == NCItems.boronAxe || tool == NCItems.boronHoe || tool == NCItems.boronPickaxe || tool == NCItems.boronShovel || tool == NCItems.boronSword) return stack.getItem() == new ItemStack(NCItems.material, 1, 43).getItem();
+			if (tool == NCItems.bronzeAxe || tool == NCItems.bronzeHoe || tool == NCItems.bronzePickaxe || tool == NCItems.bronzeShovel || tool == NCItems.bronzeSword) return stack.getItem() == NCItems.material && stack.getItemDamage() == 6;
+			if (tool == NCItems.toughAlloyAxe || tool == NCItems.toughAlloyHoe || tool == NCItems.toughAlloyPickaxe || tool == NCItems.toughAlloyShovel || tool == NCItems.toughAlloySword) return stack.getItem() == NCItems.material && stack.getItemDamage() == 7;
+			if (tool == NCItems.dUAxe || tool == NCItems.dUHoe || tool == NCItems.dUPickaxe || tool == NCItems.dUShovel || tool == NCItems.dUSword) return stack.getItem() == NCItems.parts && stack.getItemDamage() == 8;
+			if (tool == NCItems.boronAxe || tool == NCItems.boronHoe || tool == NCItems.boronPickaxe || tool == NCItems.boronShovel || tool == NCItems.boronSword) return stack.getItem() == NCItems.material && stack.getItemDamage() == 43;
 			
-			if (tool == NCItems.toughAlloyPaxel || tool == NCItems.toughBow) return stack.getItem() == new ItemStack(NCItems.material, 1, 7).getItem();
-			if (tool == NCItems.dUPaxel) return stack.getItem() == new ItemStack(NCItems.parts, 1, 8).getItem();
+			if (tool == NCItems.toughAlloyPaxel || tool == NCItems.toughBow) return stack.getItem() == NCItems.material && stack.getItemDamage() == 7;
+			if (tool == NCItems.dUPaxel) return stack.getItem() == NCItems.parts && stack.getItemDamage() == 8;
 		}
 
 		return false;
@@ -63,7 +63,7 @@ public final class AnvilRepairHandler {
 		// cost. Items can be renamed even if they are not
 		// normally repaired in an anvil.
 		event.output = itemToRepair.copy();
-		if (!event.name.isEmpty()) {
+		if (event.name != null && !event.name.isEmpty()) {
 			event.cost = RENAME_COST;
 			event.materialCost = 1;
 			setItemName(event.output, event.name);

@@ -119,7 +119,7 @@ public class TileSupercooler extends TileInventory implements IFluidHandler, ISi
 	}
 
 	public int[] getAccessibleSlotsFromSide(int slot) {
-		return null;
+		return new int[0];
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int par) {

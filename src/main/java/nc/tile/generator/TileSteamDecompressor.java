@@ -32,11 +32,14 @@ public class TileSteamDecompressor extends TileEntity implements IFluidHandler {
     		steam();
     		addSteam();
     	}
-        markDirty();
+        // Only mark the chunk for saving, markDirty() would also update all neighbours every tick
+        worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
     }
 	
 	public void addSteam() {
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			// Don't load a neighbouring chunk just to push into it
+			if (!this.worldObj.blockExists(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ)) continue;
 			TileEntity tile = this.worldObj.getTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 			if (tile instanceof TileSteamGenerator) {
 				tank2.drain(((TileSteamGenerator)tile).fill(side.getOpposite(), tank2.drain(tank2.getCapacity(), false), true), true);
@@ -92,19 +95,13 @@ public class TileSteamDecompressor extends TileEntity implements IFluidHandler {
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		NBTTagCompound fluidTag = new NBTTagCompound();
-		this.tank.writeToNBT(fluidTag);
-		nbt.setTag("tank", fluidTag);
-		this.tank2.writeToNBT(fluidTag);
-		nbt.setTag("tank2", fluidTag);
+		nbt.setTag("tank", this.tank.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("tank2", this.tank2.writeToNBT(new NBTTagCompound()));
 	}
 	
 	public void writeFluid(NBTTagCompound nbt) {
-		NBTTagCompound fluidTag = new NBTTagCompound();
-		this.tank.writeToNBT(fluidTag);
-		nbt.setTag("tank", fluidTag);
-		this.tank2.writeToNBT(fluidTag);
-		nbt.setTag("tank2", fluidTag);
+		nbt.setTag("tank", this.tank.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("tank2", this.tank2.writeToNBT(new NBTTagCompound()));
 	}
 
 	public Packet getDescriptionPacket() {

@@ -168,7 +168,8 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 	    }
 	    if (flag != flag1) { flag1 = flag; BlockFusionReactorSteam.updateBlockState(worldObj, xCoord, yCoord, zCoord); }
 	    if (this.worldObj.getBlock(xCoord, yCoord, zCoord) == NCBlocks.fusionReactorSteam && (ppp(xCoord + 1, yCoord, zCoord) || ppp(xCoord - 1, yCoord, zCoord) || ppp(xCoord, yCoord + 1, zCoord) || ppp(xCoord, yCoord - 1, zCoord) || ppp(xCoord, yCoord, zCoord + 1) || ppp(xCoord, yCoord, zCoord - 1))) {
-			if (rand.nextFloat() > 0.99875) NCExplosion.createExplosion(new EntityBomb(worldObj).setType(BombType.BOMB_STANDARD), worldObj, (double)this.xCoord, (double)this.yCoord, (double)this.zCoord, NuclearCraft.fusionMeltdowns ? 0.125F*NuclearCraft.explosionRadius : 0F, 40F, true);
+			// Server only, the client rolled its own random and blew up blocks client side
+			if (!worldObj.isRemote && rand.nextFloat() > 0.99875) NCExplosion.createExplosion(new EntityBomb(worldObj).setType(BombType.BOMB_STANDARD), worldObj, (double)this.xCoord, (double)this.yCoord, (double)this.zCoord, NuclearCraft.fusionMeltdowns ? 0.125F*NuclearCraft.explosionRadius : 0F, 40F, true);
 		}
 	    
 	    if (soundCount >= 67) {
@@ -933,6 +934,8 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 						for (int y = 0; y < 3; ++y) {
 							for (int z = -1; z < 2; ++z) {
 								
+								// Don't load a neighbouring chunk just to push into it
+								if (!this.worldObj.blockExists(xCoord + side.offsetX + x, yCoord + side.offsetY + y, zCoord + side.offsetZ + z)) continue;
 								TileEntity tile = this.worldObj.getTileEntity(xCoord + side.offsetX + x, yCoord + side.offsetY + y, zCoord + side.offsetZ + z);
 				
 								if ((tile instanceof IEnergyReceiver)) {

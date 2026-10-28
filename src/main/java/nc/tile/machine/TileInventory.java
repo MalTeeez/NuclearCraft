@@ -1,5 +1,6 @@
 package nc.tile.machine;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class TileInventory extends TileEntity implements ISidedInventory {
 	public String localizedName;
 	public ItemStack[] slots;
+	private int lastComparatorOutput = -1;
 
 	public void setGuiDisplayName(String displayName) {
 		localizedName = displayName;
@@ -86,7 +88,25 @@ public abstract class TileInventory extends TileEntity implements ISidedInventor
 
 	public void closeInventory() {}
 
-	public boolean hasCustomInventoryName() {	
+	public boolean hasCustomInventoryName() {
 		return false;
+	}
+
+	/**
+	 * Subclasses call this every tick. The full markDirty also notifies all 6 neighbours (and reads blocks 2 away,
+	 * loading chunks across borders), which only matters for comparators, so only do that when the output changed.
+	 */
+	public void markDirty() {
+		// The comparator code dereferences the tile at this position, which is gone e.g. after a meltdown
+		if (worldObj != null && worldObj.getTileEntity(xCoord, yCoord, zCoord) == this) {
+			Block block = getBlockType();
+			int output = block.hasComparatorInputOverride() ? block.getComparatorInputOverride(worldObj, xCoord, yCoord, zCoord, 0) : 0;
+			if (output == lastComparatorOutput) {
+				worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+				return;
+			}
+			lastComparatorOutput = output;
+		}
+		super.markDirty();
 	}
 }

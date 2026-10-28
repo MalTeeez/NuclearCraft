@@ -49,7 +49,8 @@ public class GuiSynchrotron extends GuiContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(bground);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        int k = this.entity.energy * 109 / (int) (this.entity.storage.getMaxEnergyStored()*0.05);
+        // Full at 5% of capacity, in long since energy * 109 overflows an int above ~19.7M RF
+        int k = (int) Math.min(109, this.entity.energy * 109L / (long) (this.entity.storage.getMaxEnergyStored()*0.05));
         this.drawTexturedModalRect(this.guiLeft + 8, this.guiTop + 6 + 109 - k, 176, 3 + 109 - k + (this.entity.complete == 1 ? 0 : 109), 5, k);
         int k2 = (int) (this.entity.fuel * 109 / 100000);
         this.drawTexturedModalRect(this.guiLeft + 18, this.guiTop + 6 + 109 - k2, 181, 3 + 109 - k2 + (this.entity.complete == 1 ? 0 : 109), 5, k2);

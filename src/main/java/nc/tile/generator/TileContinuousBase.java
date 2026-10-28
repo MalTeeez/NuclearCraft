@@ -30,7 +30,8 @@ public abstract class TileContinuousBase extends TileEntity implements IEnergyHa
     		energy();
     		addEnergy();
     	}
-        markDirty();
+        // Only mark the chunk for saving, markDirty() would also update all neighbours every tick
+        worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
     }
 	
 	public void energy() {
@@ -39,6 +40,8 @@ public abstract class TileContinuousBase extends TileEntity implements IEnergyHa
 
 	public void addEnergy() {
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			// Don't load a neighbouring chunk just to push into it
+			if (!worldObj.blockExists(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ)) continue;
 			TileEntity tile = worldObj.getTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 			if ((tile instanceof IEnergyReceiver)) {
 				storage.extractEnergy(((IEnergyReceiver)tile).receiveEnergy(side.getOpposite(), storage.extractEnergy(storage.getMaxEnergyStored(), true), false), false);

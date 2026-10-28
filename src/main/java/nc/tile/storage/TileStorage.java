@@ -34,11 +34,14 @@ public abstract class TileStorage extends TileEntity implements IEnergyHandler, 
 		if(!worldObj.isRemote) {
     		addEnergy();
     	}
-		markDirty();
+		// Only mark the chunk for saving, markDirty() would also update all neighbours every tick
+		worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
 	}
 
 	public void addEnergy() {
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			// Don't load a neighbouring chunk just to push into it
+			if (!worldObj.blockExists(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ)) continue;
 			TileEntity tile = worldObj.getTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 			if (sideMode[side.ordinal()] == 1) {
 				if ((tile instanceof IEnergyReceiver)) {

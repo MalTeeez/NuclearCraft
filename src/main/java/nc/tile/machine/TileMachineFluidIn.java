@@ -67,7 +67,7 @@ public abstract class TileMachineFluidIn extends TileMachineBase implements IFlu
 			flag = false;
 			return false;
 		}
-		if (this.cookTime >= getProcessTime) {
+		if (this.cookTime >= getProcessTime && outputFits()) {
 			flag = true;
 			return true;
 		}
@@ -159,10 +159,12 @@ public abstract class TileMachineFluidIn extends TileMachineBase implements IFlu
 	}
 	
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (resource == null || !canFill(from, resource.getFluid())) return 0;
 		return tank.fill(resource, doFill);
 	}
 
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null || !resource.isFluidEqual(tank.getFluid())) return null;
 		return tank.drain(resource.amount, doDrain);
 	}
 

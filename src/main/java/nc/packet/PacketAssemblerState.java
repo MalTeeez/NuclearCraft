@@ -3,6 +3,7 @@ package nc.packet;
 import io.netty.buffer.ByteBuf;
 import nc.NuclearCraft;
 import nc.tile.machine.TileAssembler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -37,16 +38,20 @@ public class PacketAssemblerState implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		short ordinal = buf.readShort();
-		mode = TileAssembler.Mode.values()[ordinal];
+		TileAssembler.Mode[] modes = TileAssembler.Mode.values();
+		mode = ordinal >= 0 && ordinal < modes.length ? modes[ordinal] : null;
 	}
 
 	public static class Handler implements IMessageHandler<PacketAssemblerState, IMessage> {
 		public IMessage onMessage(PacketAssemblerState message, MessageContext ctx) {
-			TileEntity te = NuclearCraft.NCProxy.getPlayerEntity(ctx).worldObj.getTileEntity(message.x, message.y, message.z);
+			EntityPlayer player = NuclearCraft.NCProxy.getPlayerEntity(ctx);
+			// The position comes straight from the client, only accept loaded tiles within reach
+			if (message.mode == null || !player.worldObj.blockExists(message.x, message.y, message.z) || player.getDistanceSq(message.x + 0.5D, message.y + 0.5D, message.z + 0.5D) > 64) return null;
+			TileEntity te = player.worldObj.getTileEntity(message.x, message.y, message.z);
 			if(te instanceof TileAssembler) {
 				TileAssembler me = (TileAssembler) te;
 				me.setMode(message.mode);
-				NuclearCraft.NCProxy.getPlayerEntity(ctx).worldObj.markBlockForUpdate(message.x, message.y, message.z);
+				player.worldObj.markBlockForUpdate(message.x, message.y, message.z);
 			}
 			return null;
 		}
