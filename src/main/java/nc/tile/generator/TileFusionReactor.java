@@ -154,7 +154,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 		   	for (int i = 1; i < 100; i++) {
 		    	if ((heat < 8 || HLevel + DLevel + TLevel + HeLevel + BLevel + Li6Level + Li7Level <= 0 || HLevel2 + DLevel2 + TLevel2 + HeLevel2 + BLevel2 + Li6Level2 + Li7Level2 <= 0 || complete == 0) && storage.getEnergyStored() >= 10000) {
 		    		this.storage.receiveEnergy(-10000, false);
-		    		heat = heat+0.0005*(NuclearCraft.fusionHeat/100);
+		    		heat = heat+8*10000/NuclearCraft.fusionIgnitionEnergy;
 		    	}
 	    	}
 		    if (heat < 0) heat = 0;

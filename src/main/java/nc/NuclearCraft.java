@@ -503,6 +503,7 @@ public class NuclearCraft {
 	public static int fusionSteam;
 	public static int fusionEfficiency;
 	public static int fusionHeat;
+	public static double fusionIgnitionEnergy;
 	public static int electromagnetRF;
 	public static boolean fusionMeltdowns;
 	public static double fusionRadiation;
@@ -919,6 +920,7 @@ public class NuclearCraft {
 		fusionSteam = fusionConfig.getInt("Fusion Reactor Steam Production Multiplier", "0: General", 100, 10, 1000, "");
 		fusionEfficiency = fusionConfig.getInt("Fusion Reactor Fuel Efficiency Multiplier", "0: General", 100, 10, 1000, "");
 		fusionHeat = fusionConfig.getInt("Fusion Reactor Heat Production Multiplier", "0: General", 100, 10, 1000, "");
+		fusionIgnitionEnergy = fusionConfig.getFloat("Fusion Reactor Ignition Energy", "0: General", 1.6E8F, 1.0E4F, 1.0E12F, "RF to heat a fusion reactor from cold to ignition (8 MK). It draws up to 990k RF/t while heating");
 		electromagnetRF = fusionConfig.getInt("Electromagnet RF/t Requirement", "0: General", 50, 0, 1000, "");
 		fusionMeltdowns = fusionConfig.getBoolean("Enable Fusion Reactor Overheating", "0: General", true, "");
 		fusionRadiation = fusionConfig.getFloat("Fusion Reactor Radiation", "0: General", 0.2F, 0F, 1000F, "Sv/h per size while running, with U25Core");
