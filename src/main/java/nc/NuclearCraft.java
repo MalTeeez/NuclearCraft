@@ -598,10 +598,7 @@ public class NuclearCraft {
 	public static int heatLi7Li7;
 	
 	public static int ringMaxSize;
-	public static int colliderRF;
-	public static int colliderProduction;
 	public static int synchrotronRF;
-	public static int synchrotronProduction;
 	public static int superElectromagnetRF;
 	public static int electromagnetHe;
 	public static int acceleratorProduction;
@@ -1016,10 +1013,7 @@ public class NuclearCraft {
 		EMUpdateRate = acceleratorConfig.getInt("Number of ticks per update of Electromagnet and Supercooler Tile Entities", "!: Update Rate", 100, 1, 1000, "");
 		acceleratorSounds = acceleratorConfig.getBoolean("Enable Particle Accelerator Sound Effects", "!: Sounds", true, "");
 		ringMaxSize = acceleratorConfig.getInt("Maximum Ring Size", "0: General", 200, 20, 2000, "");
-		colliderRF = acceleratorConfig.getInt("Collider RF Requirement Multiplier", "0: General", 100, 10, 1000, "");
-		colliderProduction = acceleratorConfig.getInt("Collider Production Multiplier", "0: General", 100, 10, 1000, "");
-		synchrotronRF = acceleratorConfig.getInt("Synchrotron RF Requirement Multiplier", "0: General", 100, 10, 1000, "");
-		synchrotronProduction = acceleratorConfig.getInt("Synchrotron Production Multiplier", "0: General", 100, 10, 1000, "");
+		synchrotronRF = acceleratorConfig.getInt("Synchrotron RF Requirement Multiplier", "0: General", 100, 10, 1000, "Scales the RF/t of superconducting electromagnets, without changing production");
 		superElectromagnetRF = acceleratorConfig.getInt("Superconducting Electromagnet RF/t Requirement", "0: General", 500, 0, 10000, "");
 		electromagnetHe = acceleratorConfig.getInt("Electromagnet Supercooler Liquid Helium mB/s Requirement", "0: General", 1, 0, 100, "");
 		acceleratorProduction = acceleratorConfig.getInt("Synchrotron Production Multiplier", "0: General", 100, 10, 1000, "");

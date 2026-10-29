@@ -21,7 +21,9 @@ public class TileSuperElectromagnet extends TileInventory implements IEnergyHand
 	public boolean flag1;
 	public int energy;
 	public EnergyStorage storage;
-	public static int power = NuclearCraft.superElectromagnetRF*NuclearCraft.EMUpdateRate*36;
+	/** RF/t actually drawn: superElectromagnetRF also scales synchrotron output, synchrotronRF only the cost. */
+	public static int powerPerTick = NuclearCraft.superElectromagnetRF*36*NuclearCraft.synchrotronRF/100;
+	public static int power = powerPerTick*NuclearCraft.EMUpdateRate;
 	private int tickCount = 0;
 	
 	public TileSuperElectromagnet() {

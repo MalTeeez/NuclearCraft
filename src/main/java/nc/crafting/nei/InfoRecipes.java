@@ -1,5 +1,6 @@
 package nc.crafting.nei;
 
+import nc.tile.accelerator.TileSuperElectromagnet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class InfoRecipes {
 		addRecipe(new ItemStack(NCBlocks.factoryIdle), "-A very useful machine-that uses RF to create-machine parts and-efficiently process ores--Can accept speed and-efficiency upgrades");
 		addRecipe(new ItemStack(NCBlocks.assemblerIdle), "-A very useful machine-that uses RF to automate-Nuclear Workspace recipes--Use sticks to block slots--Will not leave empty slots--Can accept speed and-efficiency upgrades");
 		addRecipe(new ItemStack(NCBlocks.heliumExtractorIdle), "-Uses RF to carefully-extract Liquid Helium-from its cells, so that it-can be transferred as a fluid");
-		addRecipe(new ItemStack(NCBlocks.superElectromagnetIdle), "-Used to control the-beams in particle-accelerators--Requires " + NuclearCraft.superElectromagnetRF + " RF/t to run-continuously");
+		addRecipe(new ItemStack(NCBlocks.superElectromagnetIdle), "-Used to control the-beams in particle-accelerators--Requires " + TileSuperElectromagnet.powerPerTick + " RF/t to run-continuously");
 		addRecipe(new ItemStack(NCBlocks.electromagnetIdle), "-Used to control a-Fusion Reactor's-superhot plasma--Requires " + NuclearCraft.electromagnetRF + " RF/t to run-continuously");
 		addRecipe(new ItemStack(NCBlocks.supercoolerIdle), "-Used in the construction-of particle accelerators-to cool the superconducting-electromagnets--Requires " + NuclearCraft.electromagnetHe + " mB of Liquid-Helium per second to run-continuously");
 		addRecipe(new ItemStack(NCBlocks.synchrotronIdle), "-Place at the corner of a-particle accelerator ring--Takes in electron cells and-fires them into the accelerator");
