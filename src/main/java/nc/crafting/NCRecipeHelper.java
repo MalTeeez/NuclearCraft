@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import nc.NuclearCraft;
 import cpw.mods.fml.common.FMLLog;
 
 public abstract class NCRecipeHelper {
@@ -117,8 +118,19 @@ public abstract class NCRecipeHelper {
 		}
 	}
 
+	/** True when the config removes recipes making this output. */
+	public static boolean isBlacklisted(ItemStack output) {
+		if (output == null) return false;
+		String name = Item.itemRegistry.getNameForObject(output.getItem());
+		for (String entry : NuclearCraft.recipeBlacklist) {
+			if (entry.equals(name) || entry.equals(name + ":" + output.getItemDamage())) return true;
+		}
+		return false;
+	}
+
 	/** adds the two input and output lists */
 	private void addRecipe(Object[] input, Object[] output) {
+		for (Object stack : output) if (stack instanceof ItemStack && isBlacklisted((ItemStack) stack)) return;
 		recipeList.put(convertToArrays(input), output);
 	}
 

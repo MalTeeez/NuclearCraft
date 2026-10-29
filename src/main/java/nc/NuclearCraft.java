@@ -299,7 +299,7 @@ public class NuclearCraft {
 	// Config File
 	public static boolean workspace;
 	public static boolean workspaceShiftClick;
-	public static String[] workspaceBlacklist;
+	public static String[] recipeBlacklist;
 	public static boolean nonTECoolerRecipes;
 	
 	public static int EMUpdateRate;
@@ -711,7 +711,7 @@ public class NuclearCraft {
 		
 		workspace = config.getBoolean("If disabled, all crafting recipes will be vanilla crafting table recipes, and the Heavy Duty Workspace will be disabled", "!: Enable Heavy Duty Workspace", true, "");
 		workspaceShiftClick = config.getBoolean("If enabled, shift clicking items in the Heavy Duty Workspace will move items into the crafting grid", "!: Enable Shift Click into Workspace Grid", false, "");
-		workspaceBlacklist = config.getStringList("Outputs whose Heavy Duty Workspace recipe is removed, as modid:name or modid:name:meta. For gating items behind scripted crafting table recipes", "!: Workspace Recipe Blacklist", new String[0], "");
+		recipeBlacklist = config.getStringList("Outputs whose Heavy Duty Workspace and machine recipes are removed, as modid:name or modid:name:meta. For gating items behind scripted crafting table recipes", "!: Recipe Blacklist", new String[0], "");
 		nonTECoolerRecipes = config.getBoolean("Enable the vanilla crafting recipes for the advanced reactor coolers EVEN IF Thermal Expansion is not installed", "!: Force Vanilla Crafting of Coolers", false, "");
 		
 		oreGenCopper = config.getBoolean("Generation", "0.0: Copper Ore", true, "");
