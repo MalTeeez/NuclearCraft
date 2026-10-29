@@ -145,8 +145,18 @@ public class NuclearWorkspaceCraftingManager {
         Collections.sort(this.recipes, new NuclearWorkspaceRecipeSorter());
     }
 
+    private static boolean isBlacklisted(ItemStack output) {
+    	if (output == null) return false;
+    	String name = Item.itemRegistry.getNameForObject(output.getItem());
+    	for (String entry : NuclearCraft.workspaceBlacklist) {
+    		if (entry.equals(name) || entry.equals(name + ":" + output.getItemDamage())) return true;
+    	}
+    	return false;
+    }
+
     @SuppressWarnings("unchecked")
 	public void addRecipe(IRecipe recipe) {
+    	if (isBlacklisted(recipe.getRecipeOutput())) return;
     	//NuclearWorkspaceCraftingManager.getInstance().getRecipeList().add(recipe);
     	this.recipes.add(recipe);
     }
