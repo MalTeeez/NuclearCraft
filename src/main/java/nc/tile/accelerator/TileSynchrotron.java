@@ -27,7 +27,6 @@ import cpw.mods.fml.common.FMLLog;
 
 public class TileSynchrotron extends TileInventory implements IEnergyHandler, IEnergyReceiver, ISidedInventory {
 	public int maxStorage;
-	private boolean firstCast = false;
 	public boolean flag;
 	public boolean flag1 = false;
 	public int complete;
@@ -143,10 +142,6 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 	}
 	
 	private void power() {
-		if (firstCast) {
-			this.storage.extractEnergy(this.storage.getMaxEnergyStored() - this.storage.getMaxExtract()*2, false);
-			firstCast = false;
-		}
 		if (storage.getEnergyStored() >= (int) (1000*((200-(efficiency/10000))/100)) && worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord) && flag1 && percentageOn > 0 && fuel - length >= 0) {
 			fuel = fuel - (fuel < fuelMax/2 ? length*((fuel*2)+7500)/fuelMax : length*(fuelMax+7500)/fuelMax)/4;
 			this.storage.receiveEnergy(- (int) (1000*((200-(efficiency/10000))/100)), false);
@@ -168,7 +163,6 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 			if (slots[2] == null || slots[2].stackSize == 0) {
 				slots[2] = new ItemStack(NCItems.antimatter, 1);
 				antimatter -= 64000000;
-				firstCast = true;
 			}
 			else if (slots[2].stackSize < 64) {
 				slots[2].stackSize ++;
