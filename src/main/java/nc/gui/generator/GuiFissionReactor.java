@@ -53,6 +53,16 @@ public class GuiFissionReactor extends GuiContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(bground);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+        // Tritium breeding panel: He-3 cells in at the top, tritium cells out at the bottom
+        int bx = this.guiLeft - 26, by = this.guiTop + 4;
+        drawRect(bx, by, bx + 26, by + 70, 0xFF555555);
+        drawRect(bx + 1, by + 1, bx + 26, by + 69, 0xFFC6C6C6);
+        drawRect(bx + 5, by + 7, bx + 23, by + 25, 0xFF8B8B8B);
+        drawRect(bx + 5, by + 47, bx + 23, by + 65, 0xFF8B8B8B);
+        int breed = ((ContainerFissionReactor) this.inventorySlots).breedPercent * 18 / 100;
+        drawRect(bx + 12, by + 27, bx + 16, by + 45, 0xFF373737);
+        drawRect(bx + 12, by + 27, bx + 16, by + 27 + breed, 0xFF56E0F5);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); // drawRect leaves its colour set
         int k = this.entity.energy * 55 / 25000000;
         this.drawTexturedModalRect(this.guiLeft + 8, this.guiTop + 6 + 55 - k, 176, 3 + 55 - k + (this.entity.complete == 1 ? 0 : 55), 16, k);
         int k2 = this.entity.fueltime * 55 / 10000000;

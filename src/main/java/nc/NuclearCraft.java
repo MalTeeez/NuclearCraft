@@ -412,6 +412,8 @@ public class NuclearCraft {
 	public static int fissionEfficiency;
 	public static int fissionHeat;
 	public static boolean nuclearMeltdowns;
+	public static int fissionTritiumBreeding;
+	public static boolean fusionBreedsTritium;
 	public static double fissionRadiation;
 	public static double fissionMeltdownContamination;
 	public static double spentFuelRadiation;
@@ -822,6 +824,7 @@ public class NuclearCraft {
 		fissionEfficiency = fissionConfig.getInt("Fission Reactor Fuel Efficiency Multiplier", "0: General", 100, 10, 1000, "");
 		fissionHeat = fissionConfig.getInt("Fission Reactor Heat Production Multiplier", "0: General", 100, 10, 1000, "");
 		nuclearMeltdowns = fissionConfig.getBoolean("Enable Fission Reactor Meltdowns", "0: General", true, "");
+		fissionTritiumBreeding = fissionConfig.getInt("Fission Reactor output (RF, or steam) per tritium cell bred from a helium-3 cell in its breeding slot, 0 to disable", "0: General", 4000000, 0, Integer.MAX_VALUE, "");
 		fissionRadiation = fissionConfig.getFloat("Fission Reactor Radiation", "0: General", 0.1F, 0F, 1000F, "Sv/h per effective cell while running, with U25Core");
 		fissionMeltdownContamination = fissionConfig.getFloat("Fission Meltdown Contamination", "0: General", 2F, 0F, 1000F, "Sv/h of lingering contamination per effective cell, with U25Core");
 		spentFuelRadiation = fissionConfig.getFloat("Spent Fuel Cell Radioactivity", "0: General", 0.01F, 0F, 1000F, "Sv/h per depleted fuel cell, with U25Core");
@@ -918,6 +921,7 @@ public class NuclearCraft {
 		fusionMaxRadius = fusionConfig.getInt("Fusion Reactor Maximum Radius - Defined as Number of Fusion Connectors Between the Control Chunk and a Central Inner Electromagnet", "0: General", 25, 1, 100, "");
 		fusionRF = fusionConfig.getInt("Fusion Reactor RF Production Multiplier", "0: General", 100, 10, 1000, "");
 		fusionSteam = fusionConfig.getInt("Fusion Reactor Steam Production Multiplier", "0: General", 100, 10, 1000, "");
+		fusionBreedsTritium = fusionConfig.getBoolean("Fusion Reactors make tritium from D-D and H-Li6 fusion", "0: General", true, "");
 		fusionEfficiency = fusionConfig.getInt("Fusion Reactor Fuel Efficiency Multiplier", "0: General", 100, 10, 1000, "");
 		fusionHeat = fusionConfig.getInt("Fusion Reactor Heat Production Multiplier", "0: General", 100, 10, 1000, "");
 		fusionIgnitionEnergy = fusionConfig.getFloat("Fusion Reactor Ignition Energy", "0: General", 1.6E8F, 1.0E4F, 1.0E12F, "RF to heat a fusion reactor from cold to ignition (8 MK). It draws up to 990k RF/t while heating");

@@ -1,6 +1,7 @@
 package nc.container.generator;
 
 import nc.tile.generator.TileFissionReactorSteam;
+import nc.tile.generator.TritiumBreeder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -15,6 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerFissionReactorSteam extends Container {
     private TileFissionReactorSteam entity;
     public int lastFluid;
+    public int breedPercent;
     public int lastheat;
     public int lastFueltime;
     public int lastS;
@@ -50,6 +52,10 @@ public class ContainerFissionReactorSteam extends Container {
         for (int i = 0; i < 9; ++i) {
             this.addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 153));
         }
+
+        // Tritium breeding, in a panel left of the GUI
+        this.addSlotToContainer(new Slot(entity, TritiumBreeder.IN, -20, 12));
+        this.addSlotToContainer(new SlotFurnace(inventory.player, entity, TritiumBreeder.OUT, -20, 52));
     }
 
     public void addCraftingToCrafters(ICrafting icrafting) {
@@ -67,6 +73,7 @@ public class ContainerFissionReactorSteam extends Container {
 
             icrafting.sendProgressBarUpdate(this, 1, this.entity.tank.getFluidAmount());
             icrafting.sendProgressBarUpdate(this, 2, this.entity.heat);
+            icrafting.sendProgressBarUpdate(this, 100, TritiumBreeder.percent(this.entity.breedProgress));
             icrafting.sendProgressBarUpdate(this, 3, this.entity.fueltime);
             
             icrafting.sendProgressBarUpdate(this, 4, this.entity.tank.getFluidAmount() >> 16);
@@ -119,6 +126,7 @@ public class ContainerFissionReactorSteam extends Container {
     public void updateProgressBar(int slot, int value) {
         if (slot == 1){ this.lastFluid = this.upcastShort(value); }
         if (slot == 2){ this.lastheat = this.upcastShort(value); }
+        if (slot == 100){ this.breedPercent = value; }
         if (slot == 3){ this.lastFueltime = this.upcastShort(value); }
         
         if (slot == 4){ this.entity.fluid = this.lastFluid | value << 16; }
@@ -179,8 +187,16 @@ public class ContainerFissionReactorSteam extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (clickedSlotNumber != 1 && clickedSlotNumber != 0) {
-                if (TileFissionReactorSteam.isFuel(itemstack1)) {
+            if (clickedSlotNumber >= 38) {
+                if (!this.mergeItemStack(itemstack1, 2, 38, false)) {
+                    return null;
+                }
+            } else if (clickedSlotNumber != 1 && clickedSlotNumber != 0) {
+                if (TritiumBreeder.isHe3(itemstack1)) {
+                    if (!this.mergeItemStack(itemstack1, 38, 39, false)) {
+                        return null;
+                    }
+                } else if (TileFissionReactorSteam.isFuel(itemstack1)) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return null;
                     }

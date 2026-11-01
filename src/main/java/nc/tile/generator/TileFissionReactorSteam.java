@@ -28,6 +28,8 @@ public class TileFissionReactorSteam extends TileSteamProducer implements IRadia
 	
 	private int tickCount = 0;
     public int complete;
+    /** Reactor output put towards the next bred tritium cell, see TritiumBreeder. */
+    public int breedProgress;
     
     public int x0 = 0;
     public int y0 = 0;
@@ -61,7 +63,7 @@ public class TileFissionReactorSteam extends TileSteamProducer implements IRadia
     public String problem = StatCollector.translateToLocal("gui.casingIncomplete");
 
     public TileFissionReactorSteam() {
-		super("fissionSteam", 100000, 2);
+		super("fissionSteam", 100000, 4);
 	}
     
     public static String[] cellTypes = {
@@ -127,6 +129,7 @@ public class TileFissionReactorSteam extends TileSteamProducer implements IRadia
         	product();
     		fuel();
     		steam();
+    		if (off == 0 && flag) breedProgress = TritiumBreeder.breed(slots, breedProgress, SReal);
     		overheat();
     	}
     	typeoffuelx();
@@ -812,6 +815,7 @@ public class TileFissionReactorSteam extends TileSteamProducer implements IRadia
         HCooling = nbt.getInteger("HCooling");
         FReal = nbt.getInteger("FReal");
         complete = nbt.getInteger("complete");
+        breedProgress = nbt.getInteger("breedProgress");
     }
 
     public void writeToNBT(NBTTagCompound nbt) {
@@ -845,15 +849,17 @@ public class TileFissionReactorSteam extends TileSteamProducer implements IRadia
         nbt.setInteger("HCooling", HCooling);
         nbt.setInteger("FReal", FReal);
         nbt.setInteger("complete", complete);
+        nbt.setInteger("breedProgress", breedProgress);
     }
 
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == 0) return isFuel(stack);
+        if (slot == TritiumBreeder.IN) return TritiumBreeder.isHe3(stack);
         else return false;
     }
 
     public boolean canExtractItem(int slot, ItemStack stack, int slots) {
-        return slot == 1;
+        return slot == 1 || slot == TritiumBreeder.OUT;
     }
     
     private boolean find(Block block, int x, int y, int z) {

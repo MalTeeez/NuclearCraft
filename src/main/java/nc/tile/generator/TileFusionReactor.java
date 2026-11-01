@@ -483,7 +483,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	    else if (this.HLevel > 0 && this.Li6Level2 > 0) {
 		   	if (this.HLevel >= size*TileFusionReactor.requiredHLi6 && this.Li6Level2 >= size*TileFusionReactor.requiredHLi6) {
 		   		this.heatVar = NuclearCraft.heatHLi6; newE += efficiency*pMult*size*NuclearCraft.baseRFHLi6/100; this.HLevel -= size*TileFusionReactor.requiredHLi6; this.Li6Level2 -= size*TileFusionReactor.requiredHLi6; heat += NuclearCraft.fusionHeat*(100 - ((NuclearCraft.fusionEfficiencyConverge ? 1 : 0.9)*efficiency))/200000; flag = true;
-		   		this.HE4Out += size*TileFusionReactor.requiredHLi6; this.TOut += size*TileFusionReactor.requiredHLi6;
+		   		this.HE4Out += size*TileFusionReactor.requiredHLi6; if (NuclearCraft.fusionBreedsTritium) this.TOut += size*TileFusionReactor.requiredHLi6;
 		   	}
 		   	if (this.HLevel < size*TileFusionReactor.requiredHLi6) {this.HLevel = 0;}
 		   	if (this.Li6Level2 < size*TileFusionReactor.requiredHLi6) {this.Li6Level2 = 0;}
@@ -492,7 +492,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	    else if (this.Li6Level > 0 && this.HLevel2 > 0) {
 		   	if (this.Li6Level >= size*TileFusionReactor.requiredHLi6 && this.HLevel2 >= size*TileFusionReactor.requiredHLi6) {
 		   		this.heatVar = NuclearCraft.heatHLi6; newE += efficiency*pMult*size*NuclearCraft.baseRFHLi6/100; this.Li6Level -= size*TileFusionReactor.requiredHLi6; this.HLevel2 -= size*TileFusionReactor.requiredHLi6; heat += NuclearCraft.fusionHeat*(100 - ((NuclearCraft.fusionEfficiencyConverge ? 1 : 0.9)*efficiency))/200000; flag = true;
-		   		this.HE4Out += size*TileFusionReactor.requiredHLi6; this.TOut += size*TileFusionReactor.requiredHLi6;
+		   		this.HE4Out += size*TileFusionReactor.requiredHLi6; if (NuclearCraft.fusionBreedsTritium) this.TOut += size*TileFusionReactor.requiredHLi6;
 		   	}
 		   	if (this.Li6Level < size*TileFusionReactor.requiredHLi6) {this.Li6Level = 0;}
 		   	if (this.HLevel2 < size*TileFusionReactor.requiredHLi6) {this.HLevel2 = 0;}
@@ -521,7 +521,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	    else if (this.DLevel > 0 && this.DLevel2 > 0) {
 		   	if (this.DLevel >= size*TileFusionReactor.requiredDD && this.DLevel2 >= size*TileFusionReactor.requiredDD) {
 		   		this.heatVar = NuclearCraft.heatDD; newE += efficiency*pMult*size*NuclearCraft.baseRFDD/100; this.DLevel -= size*TileFusionReactor.requiredDD; this.DLevel2 -= size*TileFusionReactor.requiredDD; heat += NuclearCraft.fusionHeat*(100 - ((NuclearCraft.fusionEfficiencyConverge ? 1 : 0.9)*efficiency))/200000; flag = true;
-		   		this.HE3Out += size*TileFusionReactor.requiredDD/2; this.TOut += size*TileFusionReactor.requiredDD/2; this.nOut += size*TileFusionReactor.requiredDD/16; this.HOut += size*TileFusionReactor.requiredDD/2;
+		   		this.HE3Out += size*TileFusionReactor.requiredDD/2; if (NuclearCraft.fusionBreedsTritium) this.TOut += size*TileFusionReactor.requiredDD/2; this.nOut += size*TileFusionReactor.requiredDD/16; this.HOut += size*TileFusionReactor.requiredDD/2;
 		   	}
 		   	if (this.DLevel < size*TileFusionReactor.requiredDD) {this.DLevel = 0;}
 		   	if (this.DLevel2 < size*TileFusionReactor.requiredDD) {this.DLevel2 = 0;}
